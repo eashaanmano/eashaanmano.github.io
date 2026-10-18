@@ -610,31 +610,45 @@ button.d:hover,button.d:focus-visible{transform:scale(1.25)}
 
 @media (max-width:520px){.kbtn kbd{display:none}}
 @media (max-width:620px){.gt{min-width:0;grid-template-columns:112px 1fr;font-size:.7rem}.gantt{padding:12px}}
+/* ---------- CRT boot intro ---------- */
 html.intro-on,html.intro-on body{overflow:hidden}
-.intro{position:fixed;inset:0;z-index:300;background:#000;display:grid;place-items:center;overflow:hidden;cursor:pointer;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));transition:background-color .7s .3s ease,opacity .6s .35s ease}
-.intro::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(150,10,18,.28) 0%,rgba(0,0,0,0) 55%);opacity:0;animation:intro-glow 1.6s .5s ease-out forwards}
-.intro-stage{position:relative;display:grid;justify-items:center;gap:18px}
-.intro-name{margin:0;font-family:var(--f-display);font-weight:800;font-stretch:75%;text-transform:uppercase;letter-spacing:.01em;line-height:.9;font-size:clamp(3.4rem,15vw,10.5rem);color:#D3232B;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:0 .22em;text-shadow:0 0 0 rgba(211,35,43,0);animation:intro-lit .9s 1.05s ease-out forwards;transform-origin:50% 55%;transition:transform .95s cubic-bezier(.7,0,.84,0),opacity .45s .5s ease,filter .9s ease}
-.intro-name .w{display:inline-flex}
-.intro-name .ch{display:inline-block;opacity:0;transform:translateY(.18em) scale(1.35);filter:blur(10px);animation:intro-ch .6s cubic-bezier(.2,.7,.2,1) forwards}
-.intro-line{display:block;height:3px;width:0;background:linear-gradient(90deg,transparent,#D3232B 20%,#FF4D55 50%,#D3232B 80%,transparent);box-shadow:0 0 18px rgba(211,35,43,.8);animation:intro-line .8s 1s cubic-bezier(.2,.7,.2,1) forwards}
-.intro-skip{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));background:transparent;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.8);font-family:var(--f-display);font-size:.85rem;font-weight:600;padding:7px 14px;border-radius:6px;cursor:pointer;opacity:0;animation:intro-fade .4s .5s forwards}
-.intro-skip:hover{border-color:#fff;color:#fff}
-.intro.out{background-color:rgba(0,0,0,0);opacity:0;pointer-events:none}
-.intro.out .intro-name{transform:scale(16);opacity:0;filter:blur(2px)}
-.intro.out .intro-line,.intro.out .intro-skip{opacity:0;transition:opacity .25s}
-@keyframes intro-ch{to{opacity:1;transform:none;filter:blur(0)}}
-@keyframes intro-lit{0%{text-shadow:0 0 0 rgba(211,35,43,0)}40%{text-shadow:0 0 28px rgba(255,60,68,.85),0 0 60px rgba(211,35,43,.5);color:#F0333C}100%{text-shadow:0 0 18px rgba(211,35,43,.45);color:#D3232B}}
-@keyframes intro-line{to{width:min(70vw,620px)}}
-@keyframes intro-glow{to{opacity:1}}
-@keyframes intro-fade{to{opacity:1}}
+.intro{position:fixed;inset:0;z-index:300;background:#000;overflow:hidden;cursor:pointer;transition:background-color .25s .38s linear}
+.crt{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(ellipse at center,#16100a 0%,#080604 62%,#000 100%);
+  transform:scale(0,.004);animation:crt-on .6s cubic-bezier(.2,.8,.2,1) .05s forwards;
+  padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px))}
+.crt::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:repeating-linear-gradient(0deg,rgba(0,0,0,.38) 0 1px,transparent 1px 3px);animation:crt-flicker .12s steps(2) infinite}
+.crt::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;background:radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.75) 100%)}
+.boot{position:relative;z-index:1;width:min(760px,100%);display:grid;gap:22px}
+.boot-log{font-family:var(--f-mono);font-size:clamp(.74rem,2.3vw,1rem);line-height:1.7;color:#FFB347;text-shadow:0 0 6px rgba(255,170,60,.75),0 0 18px rgba(255,140,30,.3);min-height:6.8em;white-space:pre;overflow:hidden}
+.boot-log .l:last-child::after{content:"";display:inline-block;width:.6em;height:1.05em;margin-left:2px;vertical-align:-2px;background:#FFB347;box-shadow:0 0 8px #FFB347;animation:crt-caret .7s steps(1) infinite}
+.boot-name{position:relative;margin:0;font-family:var(--f-display);font-weight:800;font-stretch:75%;text-transform:uppercase;letter-spacing:.01em;line-height:.9;
+  font-size:clamp(3.2rem,14.5vw,8.5rem);color:#FFC46B;text-shadow:0 0 14px rgba(255,170,60,.7),0 0 40px rgba(255,120,20,.35);opacity:0}
+.boot-name.on{opacity:1;animation:crt-glitch .55s steps(2) 1}
+.boot-name.on::before,.boot-name.on::after{content:attr(data-text);position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;opacity:0;animation:crt-split .55s steps(3) 1}
+.boot-name.on::before{color:#FF2A55;transform:translateX(-4px)}
+.boot-name.on::after{color:#2AD9FF;transform:translateX(4px);animation-delay:.05s}
+.intro-skip{position:absolute;z-index:4;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  background:transparent;border:1px solid rgba(255,179,71,.45);color:#FFB347;font-family:var(--f-mono);font-size:.78rem;padding:7px 12px;border-radius:4px;cursor:pointer;opacity:0;animation:crt-fade .3s .7s forwards}
+.intro-skip:hover{border-color:#FFB347;box-shadow:0 0 10px rgba(255,179,71,.4)}
+.intro.out{background-color:rgba(0,0,0,0);pointer-events:none}
+.intro.out .crt{animation:crt-off .45s cubic-bezier(.7,0,.84,0) forwards}
+.intro.out .intro-skip{opacity:0;animation:none}
+@keyframes crt-on{0%{transform:scale(0,.004);filter:brightness(5)}45%{transform:scale(1,.004);filter:brightness(5)}100%{transform:scale(1,1);filter:brightness(1)}}
+@keyframes crt-off{0%{transform:scale(1,1);filter:brightness(1)}55%{transform:scale(1,.004);filter:brightness(4)}100%{transform:scale(0,.004);filter:brightness(6);opacity:0}}
+@keyframes crt-flicker{0%{opacity:.85}100%{opacity:1}}
+@keyframes crt-caret{50%{opacity:0}}
+@keyframes crt-glitch{0%{transform:translate(0,0) skewX(0)}20%{transform:translate(-3px,1px) skewX(-6deg)}40%{transform:translate(3px,-1px) skewX(4deg)}60%{transform:translate(-1px,0) skewX(-2deg)}100%{transform:none}}
+@keyframes crt-split{0%{opacity:.9}60%{opacity:.6}100%{opacity:0}}
+@keyframes crt-fade{to{opacity:1}}
 </style>
 </head>
 <body>
 <div class="intro" id="intro" hidden aria-hidden="true">
-  <div class="intro-stage">
-    <h2 class="intro-name" id="intro-name"><span class="w">Eashaan</span> <span class="w">Manohar</span></h2>
-    <i class="intro-line"></i>
+  <div class="crt" id="crt">
+    <div class="boot">
+      <div class="boot-log" id="boot-log"></div>
+      <h2 class="boot-name" id="boot-name" data-text="Eashaan Manohar">Eashaan Manohar</h2>
+    </div>
   </div>
   <button class="intro-skip" id="intro-skip" type="button">Skip intro</button>
 </div>
@@ -644,15 +658,19 @@ html.intro-on,html.intro-on body{overflow:hidden}
   var seen=false;try{seen=sessionStorage.getItem('em-intro')==='1'}catch(e){}
   if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   try{sessionStorage.setItem('em-intro','1')}catch(e){}
-  var name=document.getElementById('intro-name'),i=0;
-  [].forEach.call(name.querySelectorAll('.w'),function(w){var t=w.textContent;w.textContent='';
-    t.split('').forEach(function(c){var s=document.createElement('span');s.className='ch';s.textContent=c;s.style.animationDelay=(0.05+i*0.055)+'s';i++;w.appendChild(s);});});
   el.hidden=false;document.documentElement.classList.add('intro-on');
-  var done=false,t1;
-  function out(){if(done)return;done=true;clearTimeout(t1);el.classList.add('out');
-    document.documentElement.classList.remove('intro-on');
-    setTimeout(function(){el.remove();},950);}
-  t1=setTimeout(out,2300);
+  var log=document.getElementById('boot-log'),nm=document.getElementById('boot-name');
+  var LINES=['> boot eashaan.runs-on.dev','> mount distributed-systems ...... OK','> mount production-ai ............ OK','> handshake recruiter ............ OK'];
+  var timers=[],done=false;
+  function at(ms,fn){timers.push(setTimeout(fn,ms));}
+  function type(text,ms){at(ms,function(){var d=document.createElement('div');d.className='l';log.appendChild(d);var i=0;
+    var iv=setInterval(function(){i+=2;d.textContent=text.slice(0,i);if(i>=text.length)clearInterval(iv);},14);timers.push(iv);});}
+  LINES.forEach(function(t,k){type(t,620+k*260);});
+  at(1720,function(){nm.classList.add('on');});
+  at(3000,out);
+  function out(){if(done)return;done=true;timers.forEach(function(t){clearTimeout(t);clearInterval(t);});
+    el.classList.add('out');document.documentElement.classList.remove('intro-on');
+    setTimeout(function(){el.remove();},800);}
   el.addEventListener('click',out);document.getElementById('intro-skip').addEventListener('click',out);
   addEventListener('keydown',function k(){out();removeEventListener('keydown',k);});
   addEventListener('wheel',out,{once:true,passive:true});

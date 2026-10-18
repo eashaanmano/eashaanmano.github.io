@@ -610,9 +610,55 @@ button.d:hover,button.d:focus-visible{transform:scale(1.25)}
 
 @media (max-width:520px){.kbtn kbd{display:none}}
 @media (max-width:620px){.gt{min-width:0;grid-template-columns:112px 1fr;font-size:.7rem}.gantt{padding:12px}}
+html.intro-on,html.intro-on body{overflow:hidden}
+.intro{position:fixed;inset:0;z-index:300;background:#000;display:grid;place-items:center;overflow:hidden;cursor:pointer;padding:env(safe-area-inset-top,0px) max(16px,env(safe-area-inset-right,0px)) env(safe-area-inset-bottom,0px) max(16px,env(safe-area-inset-left,0px));transition:background-color .7s .3s ease,opacity .6s .35s ease}
+.intro::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(150,10,18,.28) 0%,rgba(0,0,0,0) 55%);opacity:0;animation:intro-glow 1.6s .5s ease-out forwards}
+.intro-stage{position:relative;display:grid;justify-items:center;gap:18px}
+.intro-name{margin:0;font-family:var(--f-display);font-weight:800;font-stretch:75%;text-transform:uppercase;letter-spacing:.01em;line-height:.9;font-size:clamp(3.4rem,15vw,10.5rem);color:#D3232B;text-align:center;display:flex;flex-wrap:wrap;justify-content:center;gap:0 .22em;text-shadow:0 0 0 rgba(211,35,43,0);animation:intro-lit .9s 1.05s ease-out forwards;transform-origin:50% 55%;transition:transform .95s cubic-bezier(.7,0,.84,0),opacity .45s .5s ease,filter .9s ease}
+.intro-name .w{display:inline-flex}
+.intro-name .ch{display:inline-block;opacity:0;transform:translateY(.18em) scale(1.35);filter:blur(10px);animation:intro-ch .6s cubic-bezier(.2,.7,.2,1) forwards}
+.intro-line{display:block;height:3px;width:0;background:linear-gradient(90deg,transparent,#D3232B 20%,#FF4D55 50%,#D3232B 80%,transparent);box-shadow:0 0 18px rgba(211,35,43,.8);animation:intro-line .8s 1s cubic-bezier(.2,.7,.2,1) forwards}
+.intro-skip{position:absolute;right:max(20px,env(safe-area-inset-right,0px));bottom:calc(20px + env(safe-area-inset-bottom,0px));background:transparent;border:1px solid rgba(255,255,255,.35);color:rgba(255,255,255,.8);font-family:var(--f-display);font-size:.85rem;font-weight:600;padding:7px 14px;border-radius:6px;cursor:pointer;opacity:0;animation:intro-fade .4s .5s forwards}
+.intro-skip:hover{border-color:#fff;color:#fff}
+.intro.out{background-color:rgba(0,0,0,0);opacity:0;pointer-events:none}
+.intro.out .intro-name{transform:scale(16);opacity:0;filter:blur(2px)}
+.intro.out .intro-line,.intro.out .intro-skip{opacity:0;transition:opacity .25s}
+@keyframes intro-ch{to{opacity:1;transform:none;filter:blur(0)}}
+@keyframes intro-lit{0%{text-shadow:0 0 0 rgba(211,35,43,0)}40%{text-shadow:0 0 28px rgba(255,60,68,.85),0 0 60px rgba(211,35,43,.5);color:#F0333C}100%{text-shadow:0 0 18px rgba(211,35,43,.45);color:#D3232B}}
+@keyframes intro-line{to{width:min(70vw,620px)}}
+@keyframes intro-glow{to{opacity:1}}
+@keyframes intro-fade{to{opacity:1}}
 </style>
 </head>
 <body>
+<div class="intro" id="intro" hidden aria-hidden="true">
+  <div class="intro-stage">
+    <h2 class="intro-name" id="intro-name"><span class="w">Eashaan</span> <span class="w">Manohar</span></h2>
+    <i class="intro-line"></i>
+  </div>
+  <button class="intro-skip" id="intro-skip" type="button">Skip intro</button>
+</div>
+<script>
+(function(){
+  var el=document.getElementById('intro');
+  var seen=false;try{seen=sessionStorage.getItem('em-intro')==='1'}catch(e){}
+  if(seen||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  try{sessionStorage.setItem('em-intro','1')}catch(e){}
+  var name=document.getElementById('intro-name'),i=0;
+  [].forEach.call(name.querySelectorAll('.w'),function(w){var t=w.textContent;w.textContent='';
+    t.split('').forEach(function(c){var s=document.createElement('span');s.className='ch';s.textContent=c;s.style.animationDelay=(0.05+i*0.055)+'s';i++;w.appendChild(s);});});
+  el.hidden=false;document.documentElement.classList.add('intro-on');
+  var done=false,t1;
+  function out(){if(done)return;done=true;clearTimeout(t1);el.classList.add('out');
+    document.documentElement.classList.remove('intro-on');
+    setTimeout(function(){el.remove();},950);}
+  t1=setTimeout(out,2300);
+  el.addEventListener('click',out);document.getElementById('intro-skip').addEventListener('click',out);
+  addEventListener('keydown',function k(){out();removeEventListener('keydown',k);});
+  addEventListener('wheel',out,{once:true,passive:true});
+  addEventListener('touchmove',out,{once:true,passive:true});
+})();
+</script>
 <header class="top" id="top">
   <div class="wrap">
     <a class="mark" href="#hero"><i aria-hidden="true"></i>Eashaan Manohar</a>

@@ -640,6 +640,48 @@ html.intro-on,html.intro-on body{overflow:hidden}
 @keyframes crt-glitch{0%{transform:translate(0,0) skewX(0)}20%{transform:translate(-3px,1px) skewX(-6deg)}40%{transform:translate(3px,-1px) skewX(4deg)}60%{transform:translate(-1px,0) skewX(-2deg)}100%{transform:none}}
 @keyframes crt-split{0%{opacity:.9}60%{opacity:.6}100%{opacity:0}}
 @keyframes crt-fade{to{opacity:1}}
+
+/* ---------- Now feed (hero) ---------- */
+.now{background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);padding:18px 18px 16px;display:grid;gap:12px;align-self:start}
+.now-head{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;justify-content:space-between}
+.now-head h2{font-size:1.25rem;font-weight:800;display:flex;align-items:center;gap:10px}
+.now-head p{font-family:var(--f-display);font-size:.84rem;color:var(--ink-3)}
+.now-dot{width:9px;height:9px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 color-mix(in srgb,var(--teal) 60%,transparent);animation:now-pulse 2s infinite}
+@keyframes now-pulse{70%{box-shadow:0 0 0 8px color-mix(in srgb,var(--teal) 0%,transparent)}100%{box-shadow:0 0 0 0 transparent}}
+.now-feed{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.now-feed li{position:relative;border:1px solid var(--line);border-radius:12px;padding:10px 12px 10px 14px;cursor:pointer;background:var(--paper);transition:border-color .25s,background-color .25s;overflow:hidden;outline:none}
+.now-feed li:focus-visible{border-color:var(--turmeric-fill)}
+.now-feed li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background-color .25s}
+.now-feed li.on{border-color:color-mix(in srgb,var(--turmeric-fill) 55%,var(--line));background:var(--surface)}
+.now-feed li.on::before{background:var(--turmeric-fill)}
+.now-feed li.on::after{content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--turmeric-fill);opacity:.5;transform-origin:left;animation:now-prog 6s linear forwards}
+.now-feed.paused li.on::after{animation-play-state:paused}
+@keyframes now-prog{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.now-meta{display:flex;gap:10px;align-items:center;font-family:var(--f-display);font-size:.76rem;color:var(--ink-3)}
+.now-kind{font-weight:700;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--ink) 7%,transparent);color:var(--ink-2)}
+.now-kind[data-k="building"]{background:var(--turmeric-soft);color:var(--turmeric)}
+.now-kind[data-k="shipped"],.now-kind[data-k="research"]{background:color-mix(in srgb,var(--teal) 14%,transparent);color:var(--teal)}
+.now-kind[data-k="reading"],.now-kind[data-k="thinking"]{background:color-mix(in srgb,var(--c2) 14%,transparent);color:var(--c2)}
+.now-text{margin-top:4px;font-size:.96rem;line-height:1.45;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.now-feed li.on .now-text{color:var(--ink);-webkit-line-clamp:unset;display:block}
+.now-text b{font-family:var(--f-display);font-weight:700}
+.now-foot{font-family:var(--f-display);font-size:.82rem;color:var(--ink-3)}
+@media (prefers-reduced-motion:reduce){.now-feed li.on::after{display:none}}
+
+/* ---------- Raft demo inside the RaftKV card ---------- */
+.demo.raft{background:var(--demo-bg);border-radius:14px;box-shadow:none;overflow:visible;display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+.demo.raft .raft-stage{max-width:440px;width:100%;justify-self:center}
+.demo.raft .raft-status{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--surface)}
+.demo.raft .raft-logs{padding:12px 0 4px}
+.demo.raft .raft-events{margin:8px 0 0}
+.demo.raft .raft-ctrl{padding:14px 0 0}
+.demo.raft .legend{font-family:var(--f-display);font-size:.8rem;color:var(--ink-3);margin-top:8px}
+@media (min-width:900px){
+  .demo.raft{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);column-gap:22px;grid-template-areas:"head head" "stage status" "stage logs" "stage events" "ctrl ctrl" "foot foot" "legend legend"}
+  .demo.raft .demo-head{grid-area:head}.demo.raft .raft-stage{grid-area:stage;align-self:center}.demo.raft .raft-status{grid-area:status;align-self:end}
+  .demo.raft .raft-logs{grid-area:logs}.demo.raft .raft-events{grid-area:events;align-self:start}.demo.raft .raft-ctrl{grid-area:ctrl}
+  .demo.raft .demo-foot{grid-area:foot}.demo.raft .legend{grid-area:legend}
+}
 </style>
 </head>
 <body>
@@ -675,6 +717,36 @@ html.intro-on,html.intro-on body{overflow:hidden}
   addEventListener('keydown',function k(){out();removeEventListener('keydown',k);});
   addEventListener('wheel',out,{once:true,passive:true});
   addEventListener('touchmove',out,{once:true,passive:true});
+})();
+/* ---------- Now feed ---------- */
+(function(){
+  const $=s=>document.querySelector(s);
+  const feed=$('#now-feed');if(!feed)return;
+  const items=[...feed.children];
+  const DAY=864e5,today=new Date();today.setHours(0,0,0,0);
+  const rel=d=>{const n=Math.round((today-d)/DAY);if(n<=0)return'today';if(n===1)return'yesterday';if(n<7)return n+' days ago';if(n<30){const w=Math.round(n/7);return w+(w===1?' week ago':' weeks ago');}const m=Math.round(n/30);return m+(m===1?' month ago':' months ago');};
+  let latest=null;
+  items.forEach((li,i)=>{
+    const d=new Date((li.dataset.date||'')+'T00:00:00');const ok=!isNaN(d);
+    if(ok&&(!latest||d>latest))latest=d;
+    const head=document.createElement('div');head.className='now-meta';
+    head.innerHTML='<span class="now-kind"></span><time></time>';
+    head.firstChild.textContent=li.dataset.kind||'Note';head.firstChild.dataset.k=(li.dataset.kind||'note').toLowerCase();
+    if(ok){head.lastChild.textContent=rel(d);head.lastChild.dateTime=li.dataset.date;head.lastChild.title=d.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});}
+    const body=document.createElement('p');body.className='now-text';body.innerHTML=li.innerHTML;
+    li.innerHTML='';li.appendChild(head);li.appendChild(body);li.tabIndex=0;
+    li.addEventListener('click',()=>pick(i,true));li.addEventListener('focus',()=>pick(i,true));
+  });
+  if(latest)$('#now-updated').textContent='Updated '+rel(latest)+'. What I\'m building, studying and reading';
+  let cur=0,paused=false,timer=null;
+  function pick(i,user){cur=i;items.forEach((li,k)=>li.classList.toggle('on',k===i));if(user){paused=true;feed.classList.add('paused');}}
+  pick(0);
+  const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!RM&&items.length>1){
+    feed.addEventListener('mouseenter',()=>{paused=true;feed.classList.add('paused');});
+    feed.addEventListener('mouseleave',()=>{paused=false;feed.classList.remove('paused');});
+    timer=setInterval(()=>{if(!paused&&!document.hidden){pick((cur+1)%items.length);}},6000);
+  }
 })();
 </script>
 <header class="top" id="top">
@@ -718,36 +790,20 @@ html.intro-on,html.intro-on body{overflow:hidden}
       </dl>
     </div>
 
-    <aside class="raft" aria-labelledby="raft-title">
-      <div class="raft-head">
-        <h2 id="raft-title">RaftKV, running live</h2>
-        <p>Click a node to crash it</p>
+    <aside class="now" aria-labelledby="now-title">
+      <div class="now-head">
+        <h2 id="now-title"><span class="now-dot" aria-hidden="true"></span>Now</h2>
+        <p id="now-updated">What I'm working on, thinking about and reading</p>
       </div>
-      <div class="raft-stage">
-        <svg id="raft-svg" viewBox="0 0 420 364" role="img" aria-label="Five-node Raft cluster simulation. Use the buttons below or press Enter on a node to crash or restart it."></svg>
-      </div>
-      <dl class="raft-status">
-        <div><dt>Term</dt><dd id="st-term">0</dd></div>
-        <div><dt>Leader</dt><dd id="st-leader">none</dd></div>
-        <div><dt>Committed</dt><dd id="st-commit">0</dd></div>
-        <div><dt>Nodes up</dt><dd id="st-up">5 of 5</dd></div>
-      </dl>
-      <div class="raft-logs" id="raft-logs" aria-hidden="true"></div>
-      <ul class="raft-events" id="raft-events" aria-label="Cluster events"></ul>
-      <div class="raft-ctrl">
-        <button class="btn primary" id="rf-crash">Crash the leader</button>
-        <button class="btn" id="rf-write">Send a write</button>
-        <button class="btn" id="rf-reset">Restart all nodes</button>
-        <button class="btn" id="rf-play" hidden>Play</button>
-      </div>
-      <div class="raft-foot">
-        Real Raft rules: randomised election timeouts, majority votes, log replication, commit on quorum. Slowed down so you can watch it. Crash three nodes and writes stop, because there's no majority left.
-        <div class="legend" aria-hidden="true">
-          <span><i style="background:var(--turmeric-fill)"></i>Leader, or a write being replicated</span>
-          <span><i style="background:var(--teal)"></i>Election in progress</span>
-          <span><i style="background:var(--ink-3)"></i>Heartbeat</span>
-        </div>
-      </div>
+      <!-- Edit this list on GitHub. Newest first. data-kind is the label, data-date is YYYY-MM-DD. -->
+      <ol class="now-feed" id="now-feed">
+        <li data-kind="Building" data-date="2026-10-20">Pushing <b>LedgerFlow</b> to GitHub one day at a time: double-entry postings, idempotency keys and an outbox for webhooks.</li>
+        <li data-kind="Shipped" data-date="2026-10-18">Rebuilt this site from scratch. Every project below runs live in your browser. Try crashing the Raft leader.</li>
+        <li data-kind="Research" data-date="2026-10-20">17 of my publications are now indexed in Scopus, 19 on Google Scholar.</li>
+        <li data-kind="Studying" data-date="2026-10-15">Semester 1 at NIT Calicut: algorithms and complexity, machine learning, computer architecture.</li>
+        <li data-kind="Reading" data-date="2026-10-12"><i>Designing Data-Intensive Applications</i> by Martin Kleppmann, again. The replication chapter reads differently after writing Raft.</li>
+      </ol>
+      <p class="now-foot">Hand-written, not generated. <a href="#contact">Say hi</a> if any of this overlaps with what you're doing.</p>
     </aside>
   </div>
 </section>
@@ -816,12 +872,12 @@ html.intro-on,html.intro-on body{overflow:hidden}
 
         <article class="proj flag" data-t="sys" data-o="1">
           <div>
-            <div class="proj-top"><span class="chip award">Running at the top of this page</span></div>
+            <div class="proj-top"><span class="chip award">Running live below</span></div>
             <h3>RaftKV</h3>
             <p class="kind">Distributed key-value store</p>
             <p class="desc">A 5-node cluster that agrees on every write using Raft consensus: leader election, log replication and snapshotting, written from scratch. Stress-tested by crashing nodes and partitioning the network mid-traffic, then checking every history for linearizability.</p>
             <ul class="stack"><li>Go</li><li>gRPC</li><li>Protocol Buffers</li><li>Docker</li></ul>
-            <div class="proj-links"><a href="https://github.com/eashaanmano/raftkv" target="_blank" rel="noopener">Source on GitHub</a><a href="#hero">Try the simulation</a></div>
+            <div class="proj-links"><a href="https://github.com/eashaanmano/raftkv" target="_blank" rel="noopener">Source on GitHub</a><a href="#demo-raft">Try the simulation</a></div>
           </div>
           <dl class="spec">
             <dt>Write throughput</dt><dd>50K+ /s</dd>
@@ -1463,7 +1519,7 @@ const CMDS=[
   {t:'Open the toolkit terminal',k:'Section',run:()=>{go('skills')();setTimeout(()=>document.getElementById('term-cmd').focus({preventScroll:true}),500);}},
   {t:'Play Adi talam',k:'Demo',run:()=>{go('tala')();window.__tala&&window.__tala();}},
   {t:'Show everything',k:'View',run:()=>{setLens('all',true);}},
-  {t:'Crash the Raft leader',k:'Demo',run:()=>{go('hero')();window.__raft&&window.__raft.crashLeader();}},
+  {t:'Crash the Raft leader',k:'Demo',run:()=>{go('demo-raft')();window.__raft&&window.__raft.crashLeader();}},
   {t:'Restart all Raft nodes',k:'Demo',run:()=>{window.__raft&&window.__raft.reset();}},
   {t:'Copy email address',k:'Contact',run:()=>copy('connectwitheashaan@gmail.com','Email')},
   {t:'Open LinkedIn',k:'Link',run:ext('https://www.linkedin.com/in/eashaanmano')},

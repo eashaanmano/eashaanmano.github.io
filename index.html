@@ -2114,6 +2114,7 @@ function iconColor(hex){const r=parseInt(hex.slice(0,2),16)/255,g=parseInt(hex.s
       case 'sudo':if(/hire/.test(a)){line('[sudo] permission granted. Opening contact details.','t-hi');setTimeout(()=>document.getElementById('contact').scrollIntoView({behavior:RM?'auto':'smooth'}),400);}else line('Nice try.','t-dim');break;
       case 'clear':case 'cls':case 'clear-host':out.innerHTML='';break;
       case 'exit':line('There is no escape. Try contact instead.','t-dim');break;
+      case 'prep':line('Opening ~/vault ...','t-dim');window.open('vault/','_blank','noopener');break;
       default:line(esc(cmd)+': command not found. Type help to see what works.','t-dim');
     }
     body.scrollTop=body.scrollHeight;

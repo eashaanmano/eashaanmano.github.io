@@ -1371,63 +1371,40 @@ const ICONS={"angular":["0F0F11","M16.712 17.711H7.288l-1.204 2.916L12 24l5.916-
    tracks: 'sys' (SDE view), 'ml' (AI/ML/data view), or both.
    To promote a tool once you've used it in a project, change its 'f' to 's'. */
 const TOOLKIT=[
- ['languages','Languages',[
-  ['Python','python','s','ml sys'],['Go','go','s','sys'],['C++','cplusplus','s','sys'],['C','c','s','sys'],['Java','openjdk','s','sys'],
-  ['SQL',null,'s','ml sys'],['JavaScript','javascript','s','sys'],['TypeScript','typescript','s','sys'],['Bash / shell','gnubash','s','sys'],['CUDA','nvidia','f','ml']]],
- ['llm-genai-agents','LLMs, generative AI and agents',[
-  ['LLMs and transformers','huggingface','s','ml'],['RAG pipelines',null,'s','ml'],['Multi-agent systems',null,'s','ml'],
-  ['LLM evaluation',null,'s','ml'],['Prompt engineering',null,'s','ml'],['LangChain','langchain','s','ml'],['LangGraph','langgraph','s','ml'],
-  ['HF Transformers','huggingface','s','ml'],['Claude API','claude','s','ml'],['Gemini API','googlegemini','s','ml'],['OpenAI SDK',null,'s','ml'],
-  ['Pinecone',null,'s','ml'],['MCP servers','modelcontextprotocol','f','ml sys'],['LoRA / QLoRA / PEFT',null,'f','ml'],
-  ['vLLM','vllm','f','ml'],['Ollama','ollama','f','ml'],['LlamaIndex',null,'f','ml'],['LLM guardrails',null,'f','ml']]],
- ['ml-deep-learning','Machine learning and deep learning',[
-  ['PyTorch','pytorch','s','ml'],['TensorFlow','tensorflow','s','ml'],['Keras','keras','s','ml'],['scikit-learn','scikitlearn','s','ml'],
-  ['OpenCV','opencv','s','ml'],['YOLO','ultralytics','s','ml'],['GANs',null,'s','ml'],['Prophet, ARIMA',null,'s','ml'],
-  ['Jupyter','jupyter','s','ml'],['ONNX Runtime','onnx','f','ml'],['Weights & Biases','weightsandbiases','f','ml'],['Optuna','optuna','f','ml'],['Ray','ray','f','ml sys']]],
- ['mlops-eval','MLOps and evaluation',[
-  ['MLflow','mlflow','s','ml'],['Streamlit','streamlit','s','ml'],['Model benchmarking',null,'s','ml'],
-  ['DVC','dvc','f','ml'],['LangSmith',null,'f','ml'],['Ragas',null,'f','ml'],['Langfuse',null,'f','ml']]],
- ['data','Data engineering',[
-  ['pandas','pandas','s','ml'],['NumPy','numpy','s','ml'],['PySpark','apachespark','s','ml sys'],['Apache Kafka','apachekafka','s','ml sys'],
-  ['Hadoop','apachehadoop','s','ml'],['Airflow','apacheairflow','f','ml sys'],['DuckDB','duckdb','f','ml'],['Polars','polars','f','ml'],['Parquet','apacheparquet','f','ml sys']]],
- ['backend','Backend and APIs',[
-  ['Spring Boot','springboot','s','sys'],['Node.js','nodedotjs','s','sys'],['Express','express','s','sys'],['FastAPI','fastapi','s','ml sys'],
-  ['REST API design',null,'s','sys'],['gRPC, Protobuf',null,'s','sys'],['GraphQL','graphql','s','sys'],['Signed webhooks',null,'s','sys'],
-  ['Flask','flask','f','ml sys'],['Django','django','f','sys'],['Swagger','swagger','f','sys'],
-  ['OAuth 2.0, OIDC, JWT','jsonwebtokens','f','sys'],['WebSockets',null,'f','sys']]],
- ['distributed-systems','Distributed systems',[
-  ['Raft consensus',null,'s','sys'],['Replication and failover',null,'s','sys'],['Idempotency keys',null,'s','sys'],['Transactional outbox',null,'s','sys'],
-  ['Retries, backoff, DLQs',null,'s','sys'],['Event-driven architecture',null,'s','sys ml'],['Lock-free concurrency',null,'s','sys'],
-  ['RabbitMQ','rabbitmq','f','sys'],['Redis Streams','redis','f','sys'],['Temporal','temporal','f','sys']]],
- ['frontend','Frontend',[
-  ['React','react','s','sys'],['HTML and CSS',null,'s','sys'],['Next.js','nextdotjs','f','sys'],['Tailwind CSS','tailwindcss','f','sys'],
-  ['Angular','angular','f','sys'],['Vanilla.js',null,'f','sys'],['Playwright',null,'f','sys']]],
- ['cloud-infra','Cloud and infrastructure',[
-  ['Docker','docker','s','sys ml'],['Kubernetes','kubernetes','s','sys ml'],['AWS',null,'s','sys ml'],['Linux','linux','s','sys'],['Git','git','s','sys ml'],
-  ['GitLab CI/CD','gitlab','s','sys ml'],['Ansible','ansible','s','sys'],['GCP Vertex AI','googlecloud','s','ml'],
-  ['AWS Lambda, S3',null,'f','sys'],['SageMaker, Bedrock',null,'f','ml'],['Terraform','terraform','f','sys'],['Helm','helm','f','sys'],['GitHub Actions','githubactions','f','sys'],
-  ['Jenkins','jenkins','f','sys'],['Prometheus','prometheus','f','sys'],['Grafana','grafana','f','sys'],['OpenTelemetry','opentelemetry','f','sys'],
-  ['Nginx','nginx','f','sys'],['Cloudflare Workers','cloudflareworkers','f','sys']]],
- ['databases','Databases and storage',[
-  ['PostgreSQL','postgresql','s','sys ml'],['MySQL','mysql','s','sys'],['MongoDB','mongodb','s','sys'],['Redis','redis','s','sys'],
-  ['Hyperledger Fabric',null,'s','sys'],['Vector databases',null,'s','ml'],['pgvector',null,'f','ml sys'],['Qdrant','qdrant','f','ml'],
-  ['Elasticsearch','elasticsearch','f','sys ml'],['Neo4j','neo4j','f','ml'],['ClickHouse','clickhouse','f','sys ml']]],
- ['systems-performance','Systems and performance',[
-  ['perf profiling',null,'s','sys'],['Fuzz testing',null,'s','sys'],['CMake','cmake','s','sys'],['Cache-aware design',null,'s','sys'],
-  ['gdb',null,'f','sys'],['Valgrind',null,'f','sys'],['strace',null,'f','sys'],['LLVM','llvm','f','sys'],['eBPF',null,'f','sys']]],
- ['security-reliability','Security, testing and reliability',[
-  ['Wireshark',null,'s','sys'],['Linearizability checks',null,'s','sys'],['Splunk',null,'s','sys ml'],
-  ['Selenium','selenium','s','sys'],['Postman','postman','s','sys'],['Unit to end-to-end tests',null,'s','sys'],
-  ['k6, Locust load tests','k6','f','sys'],['ELK Stack',null,'f','sys'],['LLM red-teaming',null,'f','ml']]],
- ['automation-tools','Automation and business tools',[
-  ['UiPath RPA','uipath','s','sys'],['ServiceNow',null,'s','sys ml'],['Kanban / Agile',null,'s','sys'],
-  ['Power BI',null,'f','ml'],['Power Automate',null,'f','sys'],['Excel (advanced)',null,'f','ml'],['Figma',null,'f','sys']]],
- ['fundamentals','CS fundamentals',[
-  ['DSA',null,'s','sys ml'],['System design (HLD)',null,'s','sys'],['OOD and LLD',null,'s','sys'],
-  ['Distributed systems',null,'s','sys'],['Concurrency and parallelism',null,'s','sys'],['Operating systems',null,'s','sys'],['Computer networks',null,'s','sys'],
-  ['Database internals',null,'s','sys'],['Design patterns',null,'s','sys'],['Probability and statistics',null,'s','ml'],['Computer architecture',null,'s','sys']]]
+  ['languages','Languages',[
+   ['Python','python','s','ml sys'],['C++','cplusplus','s','sys'],['C','c','s','sys'],['Java','openjdk','s','sys'],['Go','go','s','sys'],
+   ['SQL',null,'s','ml sys'],['JavaScript','javascript','s','sys'],['TypeScript','typescript','s','sys'],['Bash / shell','gnubash','s','sys']]],
+  ['llm-genai-agents','LLMs, generative AI and agents',[
+   ['LLMs and transformers','huggingface','s','ml'],['RAG pipelines',null,'s','ml'],['AI agents',null,'s','ml'],['LangChain','langchain','s','ml'],
+   ['LangGraph','langgraph','s','ml'],['HF Transformers','huggingface','s','ml'],['OpenAI SDK',null,'s','ml'],['MCP servers','modelcontextprotocol','f','ml sys']]],
+  ['ml-deep-learning','Machine learning and deep learning',[
+   ['PyTorch','pytorch','s','ml'],['TensorFlow','tensorflow','s','ml'],['scikit-learn','scikitlearn','s','ml'],['OpenCV','opencv','s','ml'],['YOLO','ultralytics','s','ml']]],
+  ['mlops-eval','MLOps and evaluation',[
+   ['MLflow','mlflow','s','ml'],['Model benchmarking',null,'s','ml'],['Weights & Biases','weightsandbiases','f','ml'],['Ragas',null,'f','ml']]],
+  ['data','Data engineering',[
+   ['NumPy','numpy','s','ml'],['pandas','pandas','s','ml'],['PySpark','apachespark','s','ml sys'],['Apache Kafka','apachekafka','s','ml sys'],['Airflow','apacheairflow','f','ml sys']]],
+  ['backend','Backend and APIs',[
+   ['Spring Boot','springboot','s','sys'],['Node.js','nodedotjs','s','sys'],['Express','express','s','sys'],['FastAPI','fastapi','s','ml sys'],
+   ['REST API design',null,'s','sys'],['gRPC, Protobuf',null,'s','sys'],['PostgreSQL integration','postgresql','s','sys']]],
+  ['distributed-systems','Distributed systems',[
+   ['Event-driven architecture',null,'s','sys ml'],['Replication and failover',null,'s','sys'],['Idempotency keys',null,'s','sys'],['Retries and backoff',null,'s','sys']]],
+  ['frontend','Frontend',[
+   ['React','react','s','sys'],['HTML and CSS',null,'s','sys'],['Next.js','nextdotjs','f','sys']]],
+  ['cloud-infra','Cloud and infrastructure',[
+   ['Docker','docker','s','sys ml'],['Kubernetes','kubernetes','s','sys ml'],['AWS',null,'s','sys ml'],['Linux','linux','s','sys'],
+   ['Git','git','s','sys ml'],['CI/CD','gitlab','s','sys ml'],['Terraform','terraform','f','sys']]],
+  ['databases','Databases and storage',[
+   ['PostgreSQL','postgresql','s','sys ml'],['MySQL','mysql','s','sys'],['MongoDB','mongodb','s','sys'],['Redis','redis','s','sys'],['Vector databases',null,'s','ml']]],
+  ['systems-performance','Systems and performance',[
+   ['CMake','cmake','s','sys'],['perf profiling',null,'s','sys'],['Cache-aware design',null,'s','sys'],['gdb',null,'f','sys']]],
+  ['security-reliability','Testing and reliability',[
+   ['Unit and integration tests',null,'s','sys'],['End-to-end tests',null,'s','sys'],['Postman','postman','s','sys'],['Playwright',null,'f','sys'],['Load testing','k6','f','sys']]],
+  ['automation-tools','Automation and business tools',[
+   ['UiPath RPA','uipath','s','sys'],['ServiceNow',null,'s','sys ml'],['Agile / Kanban',null,'s','sys']]],
+  ['fundamentals','CS fundamentals',[
+   ['DSA',null,'s','sys ml'],['System design (HLD)',null,'s','sys'],['OOD and LLD',null,'s','sys'],['Operating systems',null,'s','sys'],
+   ['Computer networks',null,'s','sys'],['DBMS',null,'s','sys'],['Distributed systems',null,'s','sys'],['Concurrency and parallelism',null,'s','sys']]]
 ];
-
 (function(){
 "use strict";
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
